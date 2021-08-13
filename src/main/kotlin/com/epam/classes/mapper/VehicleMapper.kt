@@ -18,7 +18,7 @@ class VehicleMapper {
      * to lower case
      */
     fun mapNameToVehicle(vehicleName: String?) =
-        when (vehicleName?.trim()?.toLowerCase()) {
+        when (vehicleName) {
             BIKE -> Bike()
             CAR -> Car()
             BUS -> Bus()

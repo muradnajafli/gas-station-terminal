@@ -32,12 +32,14 @@ class GasStation {
     /**
      * Using 'VehicleMapper' in this function get vehicle instance and
      * then return it after check.
-     * User should see "Your vehicle is com.epam.classes.data.Bike" notification after
-     * successful choosing a bike. The same with other vehicles.
+     * User should see in terminal "Your vehicle is toStringImplementationOfYourVehicleClass"
+     * notification after successful choosing a vehicle.
      * In an unsuccessful case (when vehicle is 'com.epam.classes.data.NonVehicle')
      * user should see "Please select one of available vehicles:
      * bike, car, bus or truck" notification and
-     * must enter vehicleName for checking it one more time.
+     * must enter vehicleName for checking it one more time. Instead of “bike”, “car”, bus” and “truck”
+     * you should use const strings. You should handle case when value that you are getting from
+     * the terminal is null. In this case return value after mapping with VehicleMapper.
      * @param vehicleName of customer vehicle (one of suggested)
      * @return com.epam.classes.data.Vehicle instance after check
      */
@@ -56,8 +58,9 @@ class GasStation {
      * User should see "Discount exist" notification after
      * accepting discount availability. User should see "Discount doesn't exist"
      * notification after declining discount availability.
-     * In an unsuccessful case user should see "Please enter "yes" or "no""
-     * notification and should enter discount availability one more time.
+     * In an unsuccessful case user should see "Please enter "yes" or "no"" notification and should
+     * enter discount availability one more time. Instead of “yes” and “no” use const strings.
+     * You should handle cases when value that you are getting from the terminal is NOT null only.
      * @param answerAboutDiscount string, which must be "yes" or "no", in other cases
      * app should propose to user to enter answer about discount availability one more time
      * @return boolean value. If user has discount, then app should return "true",
@@ -68,7 +71,7 @@ class GasStation {
     }
 
     /**
-     * @param volumeString string, amount of liters that customers wants to fill
+     * @param volumeString string, amount of liters that customers want to fill
      * @param vehicle - vehicle that we need to fill
      * @param isDiscountExist - boolean value that we can receive after executing
      * 'isDiscountExist'
@@ -83,13 +86,18 @@ class GasStation {
      * b) Unsuccessful case: "Please enter correct value (not
      * bigger than your tank volume: 500 liters)" where 500 is volume of vehicle tank.
      * After appearing of this message user should enter volume value one more time.
+     * You should handle cases when value that you are getting from the terminal is NOT null only.
      */
     fun checkAndShowTotalPrice(vehicle: Vehicle, isDiscountExist: Boolean?, volumeString: String?) {
         //TODO()
     }
 
     /**
-     * @param fuelValue Int, amount of liters that customers wants fill
+     * For the calculation of total price you should multiply the number of liters by
+     * the cost per liter with discount. Please keep in mind that `discount` value of
+     * Fuel instance set in percentages. For example, if discount value is 5,
+     * it means that discount is 5%.
+     * @param fuelValue Int, amount of liters that customers want fill
      * @param vehicle - vehicle that we need to fill
      * @param isDiscountExist - boolean value that we can receive after executing
      * 'isDiscountExist' function
