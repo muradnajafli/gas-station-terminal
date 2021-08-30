@@ -31,15 +31,13 @@ class GasStation {
 
     /**
      * Using 'VehicleMapper' in this function get vehicle instance and
-     * then return it after check.
+     * then return it after checking.
      * User should see in terminal "Your vehicle is toStringImplementationOfYourVehicleClass"
      * notification after successful choosing a vehicle.
      * In an unsuccessful case (when vehicle is 'com.epam.classes.data.NonVehicle')
-     * user should see "Please select one of available vehicles:
+     * user should see "Please select one of the available vehicles:
      * bike, car, bus or truck" notification and
-     * must enter vehicleName for checking it one more time. Instead of “bike”, “car”, bus” and “truck”
-     * you should use const strings. You should handle case when value that you are getting from
-     * the terminal is null. In this case return value after mapping with VehicleMapper.
+     * must enter vehicleName for checking it one more time.
      * @param vehicleName of customer vehicle (one of suggested)
      * @return com.epam.classes.data.Vehicle instance after check
      */
@@ -63,8 +61,8 @@ class GasStation {
      * You should handle cases when value that you are getting from the terminal is NOT null only.
      * @param answerAboutDiscount string, which must be "yes" or "no", in other cases
      * app should propose to user to enter answer about discount availability one more time
-     * @return boolean value. If user has discount, then app should return "true",
-     * if doesn't have - "false"
+     * @return boolean value. If a user has a discount, the app should return "true",
+     * if they don't have - "false".
      */
     fun checkAndReturnIsDiscountAvailable(answerAboutDiscount: String?): Boolean? {
         //TODO()
@@ -82,7 +80,7 @@ class GasStation {
      *
      * As a result of this fun user will see next notification:
      * a) Successful case: "Bill: $totalPrice". Total price we can
-     * calculate using 'calculateTotalPrice' fun
+     * calculate using 'calculateTotalPrice' function
      * b) Unsuccessful case: "Please enter correct value (not
      * bigger than your tank volume: 500 liters)" where 500 is volume of vehicle tank.
      * After appearing of this message user should enter volume value one more time.
@@ -97,7 +95,7 @@ class GasStation {
      * the cost per liter with discount. Please keep in mind that `discount` value of
      * Fuel instance set in percentages. For example, if discount value is 5,
      * it means that discount is 5%.
-     * @param fuelValue Int, amount of liters that customers want fill
+     * @param fuelValue Int, number of liters that customers want to fill
      * @param vehicle - vehicle that we need to fill
      * @param isDiscountExist - boolean value that we can receive after executing
      * 'isDiscountExist' function
