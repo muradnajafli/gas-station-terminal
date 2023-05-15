@@ -1,19 +1,23 @@
 package com.epam.classes.mapper
 
-import com.epam.classes.Const.NO
-import com.epam.classes.Const.YES
 import com.epam.classes.data.DiscountAvailability
+import com.epam.classes.Const
 
 class DiscountAvailabilityMapper {
+
     /**
-     * If 'isDiscountCardAvailable' contains spaces we should remove them.
-     * And also case should not affect the result. We must convert 'isDiscountCardAvailable'
-     * to lower case
+     * Converts user's input into [DiscountAvailability]
+     *
+     * Requirements for method:
+     *  - spaces should be removed
+     *  - input should be converted to lower case
+     * Requirements for input:
+     *  - only not-null and not-empty inputs should be converted
+     *
+     * @return discount which corresponds to [isAvailable] or [DiscountAvailability.ERROR]
+     *         if input doesn't meet requirements
+     * @see [Const.YES] [Const.NO]
      */
-    fun mapAnswer(isDiscountCardAvailable: String?) =
-        when (isDiscountCardAvailable) {
-            YES -> DiscountAvailability.AVAILABLE
-            NO -> DiscountAvailability.NON_AVAILABLE
-            else -> DiscountAvailability.ERROR
-        }
+    fun mapAnswer(isAvailable: String?): DiscountAvailability =
+        TODO()
 }

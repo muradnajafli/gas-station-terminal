@@ -7,15 +7,20 @@ import com.epam.classes.Const.NO
 import com.epam.classes.Const.TRUCK
 import com.epam.classes.Const.YES
 import com.epam.classes.data.Vehicle
+import com.epam.classes.mapper.DiscountAvailabilityMapper
+import com.epam.classes.mapper.VehicleMapper
+import com.epam.classes.data.Fuel
+import com.epam.classes.data.NonVehicle
 
 class GasStation {
 
     /**
-     * Initialize 'vehicleMapper' and 'discountAvailabilityMapper' here
-     * and make it private
+     * Requirements:
+     * - initialize 'vehicleMapper' and 'discountAvailabilityMapper' here
+     *   and make it private
      */
-    val vehicleMapper =
-     val discountAvailabilityMapper =
+    val vehicleMapper: VehicleMapper = TODO()
+    val discountAvailabilityMapper: DiscountAvailabilityMapper = TODO()
 
     fun fillTank() {
         val vehicle = selectVehicle()
@@ -24,26 +29,90 @@ class GasStation {
         checkAndShowTotalPrice(vehicle, isDiscountExist, readLine())
     }
 
-    fun selectVehicle(): Vehicle {
-        println("Please choose your vehicle: $BIKE, $CAR, $BUS or $TRUCK")
-        return getCustomerVehicle(readLine())
+    /**
+     * Converts user input into [Vehicle] by using [vehicleMapper] and
+     * shows appropriate message. Valid inputs are: "bike", "car", "bus" or "truck"
+     *
+     * Requirements:
+     * - when vehicle is valid, it should be returned with the message:
+     *   "Your vehicle is {selectedVehicle.toString()}"
+     * - when vehicle is not valid ([NonVehicle]), then we have to ask user
+     *   to enter vehicle name until it will be valid and show the message:
+     *   "Please select one of available vehicles: bike, car, bus or truck"
+     * Tips:
+     * - you have all vehicle names as constants in the [Const] class
+     * - please notice that user input could be null
+     * - recursion could help you to satisfy *until it will be valid* requirement
+     *
+     * @param vehicleName represents user input with selected vehicle
+     * @return appropriate vehicle based on user input
+     */
+    fun getCustomerVehicle(vehicleName: String?): Vehicle {
+        TODO()
     }
 
     /**
-     * Using 'VehicleMapper' in this function get vehicle instance and
-     * then return it after check.
-     * User should see in terminal "Your vehicle is toStringImplementationOfYourVehicleClass"
-     * notification after successful choosing a vehicle.
-     * In an unsuccessful case (when vehicle is 'com.epam.classes.data.NonVehicle')
-     * user should see "Please select one of available vehicles:
-     * bike, car, bus or truck" notification and
-     * must enter vehicleName for checking it one more time. Instead of “bike”, “car”, bus” and “truck”
-     * you should use const strings. You should handle case when value that you are getting from
-     * the terminal is null. In this case return value after mapping with VehicleMapper.
-     * @param vehicleName of customer vehicle (one of suggested)
-     * @return com.epam.classes.data.Vehicle instance after check
+     * Checks discount availability by using [discountAvailabilityMapper] and
+     * shows appropriate message. Valid inputs are "yes" or "no"
+     *
+     * Requirements:
+     * - when [answerAboutDiscount] is valid, appropriate boolean value should be returned
+     * - when [answerAboutDiscount] is not valid, we should ask user to enter discount availability
+     *   once again until it will be valid and show the message:
+     *   "Please enter "yes" or "no""
+     * - when discount is exists, used should see a message: "Discount exist"
+     * - when discount isn't exists, used should see a message: "Discount doesn't exist"
+     * Tips:
+     * - try to use 'when' operator instead of 'if'
+     * - you have all discount inputs as constants in the [Const] class
+     * - please notice that user input could be null
+     * - recursion could help you to satisfy *until it will be valid* requirement
+     *
+     * @param answerAboutDiscount represents user input with discount availability
+     * @return is discount available or not
      */
-    fun getCustomerVehicle(vehicleName: String?): Vehicle {
+    fun checkAndReturnIsDiscountAvailable(answerAboutDiscount: String?): Boolean? {
+        TODO()
+    }
+
+    /**
+     * Calculates total price and shows it to the user.
+     *
+     * Requirements:
+     * - if [volumeString] contains incorrect value that **cannot be cast to Int** or
+     *   **it's greater than vehicle tank volume** then ask user to enter amount of liters
+     *   until it will be valid
+     * - successful case should have output:
+     *   "Bill: $totalPrice"
+     * - unsuccessful case should have output:
+     *   "Please enter correct value (not bigger than your tank volume: 500 liters)",
+     *   where 500 is [Vehicle.volume]
+     * Tips:
+     * - total price we can calculate using [calculateTotalPrice]
+     * - please notice that user input could be null
+     * - recursion could help you to satisfy *until it will be valid* requirement
+     *
+     * @param volumeString represents user input with amount of liters that customer wants to fill
+     * @param vehicle which we need to fill
+     * @param isDiscountExist is discount exists or not (result of [GasStation.isDiscountExist])
+     */
+    fun checkAndShowTotalPrice(vehicle: Vehicle, isDiscountExist: Boolean?, volumeString: String?) {
+        //TODO()
+    }
+
+    /**
+     * Calculates total price which should be spent to fill a vehicle tank, based
+     * on the [Fuel.cost] and [Fuel.discount], if [isDiscountExist] == true
+     *
+     * Tips:
+     * - please, keep in mind that [Fuel.discount] represents in percentages
+     *
+     * @param fuelValue amount of liters that customers want to fill
+     * @param vehicle which we need to fill
+     * @param isDiscountExist is discount exists or not (result of [GasStation.isDiscountExist])
+     * @return total price based on the required fuel
+     */
+    fun calculateTotalPrice(fuelValue: Int, vehicle: Vehicle, isDiscountExist: Boolean?): Double {
         TODO()
     }
 
@@ -52,65 +121,20 @@ class GasStation {
         return checkAndReturnIsDiscountAvailable(readLine())
     }
 
-    /**
-     * Using 'DiscountAvailabilityMapper' get 'DiscountAvailability' and then
-     * use 'when' expression to return correct Boolean value regarding 'DiscountAvailability'.
-     * User should see "Discount exist" notification after
-     * accepting discount availability. User should see "Discount doesn't exist"
-     * notification after declining discount availability.
-     * In an unsuccessful case user should see "Please enter "yes" or "no"" notification and should
-     * enter discount availability one more time. Instead of “yes” and “no” use const strings.
-     * You should handle cases when value that you are getting from the terminal is NOT null only.
-     * @param answerAboutDiscount string, which must be "yes" or "no", in other cases
-     * app should propose to user to enter answer about discount availability one more time
-     * @return boolean value. If user has discount, then app should return "true",
-     * if doesn't have - "false"
-     */
-    fun checkAndReturnIsDiscountAvailable(answerAboutDiscount: String?): Boolean? {
-        //TODO()
+    private fun selectVehicle(): Vehicle {
+        println("Please choose your vehicle: $BIKE, $CAR, $BUS or $TRUCK")
+        return getCustomerVehicle(readLine())
     }
 
     /**
-     * @param volumeString string, amount of liters that customers want to fill
-     * @param vehicle - vehicle that we need to fill
-     * @param isDiscountExist - boolean value that we can receive after executing
-     * 'isDiscountExist'
-     * @return Unit
-     * Handle these cases and ask user to enter amount of liters one more time:
-     * 1) volume contains incorrect value that cannot be cast to Int
-     * 2) volume contains amount of liters that more than vehicle tank volume
+     * Checks is [isDiscountAvailable] and returns a discount value for
+     * a given vehicle
      *
-     * As a result of this fun user will see next notification:
-     * a) Successful case: "Bill: $totalPrice". Total price we can
-     * calculate using 'calculateTotalPrice' fun
-     * b) Unsuccessful case: "Please enter correct value (not
-     * bigger than your tank volume: 500 liters)" where 500 is volume of vehicle tank.
-     * After appearing of this message user should enter volume value one more time.
-     * You should handle cases when value that you are getting from the terminal is NOT null only.
+     * Requirements:
+     * - if discount exist, should return a [Fuel.discount] for a corresponding vehicle
+     * - if discount isn't exists should return 0
      */
-    fun checkAndShowTotalPrice(vehicle: Vehicle, isDiscountExist: Boolean?, volumeString: String?) {
-        //TODO()
+    private fun getDiscountValue(vehicle: Vehicle, isDiscountAvailable: Boolean?): Int {
+        TODO()
     }
-
-    /**
-     * For the calculation of total price you should multiply the number of liters by
-     * the cost per liter with discount. Please keep in mind that `discount` value of
-     * Fuel instance set in percentages. For example, if discount value is 5,
-     * it means that discount is 5%.
-     * @param fuelValue Int, amount of liters that customers want fill
-     * @param vehicle - vehicle that we need to fill
-     * @param isDiscountExist - boolean value that we can receive after executing
-     * 'isDiscountExist' function
-     * @return totalPrice - Double
-     */
-    fun calculateTotalPrice(fuelValue: Int, vehicle: Vehicle, isDiscountExist: Boolean?): Double {
-        //TODO()
-    }
-
-    private fun getDiscountValue(vehicle: Vehicle, isDiscountCardAvailable: Boolean?) =
-        if (isDiscountCardAvailable == true) {
-            vehicle.fuel.discountValue
-        } else {
-            0
-        }
 }

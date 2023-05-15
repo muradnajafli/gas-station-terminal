@@ -1,29 +1,47 @@
 package com.epam.classes.data
 
-sealed class Vehicle(val fuel: Fuel = NonFuel, val tankVolume: Int = 0)
 /**
- * All these classes should be inherited from com.epam.classes.data.Vehicle class
- * and 'petrol' and 'diesel' fields must have default values
- * (instances of classes with default values of properties)
+ * Represents a super class for available vehicles
+ *
+ * Requirements:
+ * - super class should have default vales for its property
+ * Tips:
+ * - [NonFuel] type is suitable to be a default fuel
  */
-data class Bike(
-    val petrol: Petrol,
-    val volume: Int = 15,
+sealed class Vehicle(
+    val fuel: Fuel = TODO(),
+    val volume: Int = TODO()
 )
 
-data class Car(
-    val petrol: Petrol,
-    val volume: Int = 70,
+/**
+ * Here are all required types of vehicle to use in the task
+ *
+ * Requirements:
+ * - all of them should be inherited from [Vehicle] class
+ * - function `toString()` should return simple name: Bike, Car and e.t.c.
+ * - [fuel] fields in every vehicle should have default values
+ * Tips:
+ * - in case of [NonVehicle] since it's an object you can use
+ *  *default values* in super class
+ */
+class Bike(
+    fuel: Petrol,
+    volume: Int = 15,
 )
 
-data class Bus(
-    val diesel: Diesel,
-    val volume: Int = 300
+class Car(
+    fuel: Petrol,
+    volume: Int = 70,
 )
 
-data class Truck(
-    val diesel: Diesel,
-    val volume: Int = 800
+class Bus(
+    fuel: Diesel,
+    volume: Int = 300
+)
+
+class Truck(
+    fuel: Diesel,
+    volume: Int = 800
 )
 
 object NonVehicle
