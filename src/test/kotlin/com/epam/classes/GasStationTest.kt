@@ -20,6 +20,7 @@ import java.io.PrintStream
 
 class GasStationTest {
 
+
     private lateinit var gasStation: GasStation
 
     private val standardOut = System.out
@@ -31,48 +32,53 @@ class GasStationTest {
         gasStation = GasStation()
     }
 
+    @After
+    fun tearDown() {
+        System.setOut(standardOut)
+    }
+
     @Test
-    fun testCheckAndReturnBike() {
-        val bike = BIKE
-        val vehicle = gasStation.getCustomerVehicle(bike)
+    fun `when Bike is selected then appropriate message should be shown`() {
+        val input = BIKE
+        gasStation.getCustomerVehicle(input)
         Assert.assertEquals(
-            "Your vehicle is $vehicle",
+            "Your vehicle is ${Bike::class.simpleName}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun testCheckAndReturnBus() {
-        val bus = BUS
-        val vehicle = gasStation.getCustomerVehicle(bus)
+    fun `when Bus is selected then appropriate message should be shown`() {
+        val input = BUS
+        gasStation.getCustomerVehicle(input)
         Assert.assertEquals(
-            "Your vehicle is $vehicle",
+            "Your vehicle is ${Bus::class.simpleName}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun testCheckAndReturnCar() {
-        val car = CAR
-        val vehicle = gasStation.getCustomerVehicle(car)
+    fun `when Car is selected then appropriate message should be shown`() {
+        val input = CAR
+        gasStation.getCustomerVehicle(input)
         Assert.assertEquals(
-            "Your vehicle is $vehicle",
+            "Your vehicle is ${Car::class.simpleName}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun testCheckAndReturnTruck() {
-        val truck = TRUCK
-        val vehicle  = gasStation.getCustomerVehicle(truck)
+    fun `when Truck is selected then appropriate message should be shown`() {
+        val input = TRUCK
+        gasStation.getCustomerVehicle(input)
         Assert.assertEquals(
-            "Your vehicle is $vehicle",
+            "Your vehicle is ${Truck::class.simpleName}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun testCheckAndReturnIncorrectVehicle() {
+    fun `when user input is not valid for vehicle then an error notification should be shown`() {
         val vehicle = "vehicle"
         gasStation.getCustomerVehicle(vehicle)
         Assert.assertEquals(
@@ -82,9 +88,8 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckAndReturnDiscountAvailable() {
-        val isDiscountCardAvailable = YES
-        gasStation.checkAndReturnIsDiscountAvailable(isDiscountCardAvailable)
+    fun `when discount is available then appropriate message should be shown`() {
+        gasStation.checkAndReturnIsDiscountAvailable(YES)
         Assert.assertEquals(
             "Discount exist",
             outputStreamCaptor.toString().trim()
@@ -92,9 +97,8 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckAndReturnDiscountNotAvailable() {
-        val isDiscountCardAvailable = NO
-        gasStation.checkAndReturnIsDiscountAvailable(isDiscountCardAvailable)
+    fun `when discount is not available then appropriate message should be shown`() {
+        gasStation.checkAndReturnIsDiscountAvailable(NO)
         Assert.assertEquals(
             "Discount doesn't exist",
             outputStreamCaptor.toString().trim()
@@ -102,9 +106,8 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckAndReturnDiscountAvailabilityError() {
-        val isDiscountCardAvailable = "test"
-        gasStation.checkAndReturnIsDiscountAvailable(isDiscountCardAvailable)
+    fun `when user input is not valid for discount then an error notification should be shown`() {
+        gasStation.checkAndReturnIsDiscountAvailable("not valid input")
         Assert.assertEquals(
             "Please enter \"$YES\" or \"$NO\"",
             outputStreamCaptor.toString().trim()
@@ -112,13 +115,33 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckFuelVolumeForBus() {
+    fun `when discount exists then it should be applied to the total price`() {
+        val amount = 100
+        val vehicle = Bus()
+        /*
+           Formula to calculate: amount * (costPerLiter - costPerLiter*discount)
+           Since bus uses diesel (2$ pet liter and discount 5%) we have:
+           100 * (2 - 2 * 0.05) = 100 * (2-0.1) = 190
+         */
+        val expectedPrice = 190.0
+
+        val totalPrice = gasStation.calculateTotalPrice(amount, vehicle, true)
+        assert(expectedPrice == totalPrice) {
+            "For example: for 100 liters of diesel (2 dollars pet liter and discount 5%) " +
+                    "total price should be 190 "
+        }
+    }
+
+    @Test
+    fun `when bill is ready for Bus then appropriate message should be shown`() {
         val volume = "20"
         val fuelValue = volume.toInt()
         val vehicle = Bus()
-        val isDiscountExist = true
+        val isDiscountExist = false
+
         val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
         gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+
         Assert.assertEquals(
             "Bill: $totalPrice",
             outputStreamCaptor.toString().trim()
@@ -126,13 +149,15 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckFuelVolumeForCar() {
+    fun `when bill is ready for Car then appropriate message should be shown`() {
         val volume = "20"
         val fuelValue = volume.toInt()
         val vehicle = Car()
-        val isDiscountExist = true
+        val isDiscountExist = false
+
         val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
         gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+
         Assert.assertEquals(
             "Bill: $totalPrice",
             outputStreamCaptor.toString().trim()
@@ -140,13 +165,15 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckFuelVolumeForBike() {
+    fun `when bill is ready for Bike then appropriate message should be shown`() {
         val volume = "10"
         val fuelValue = volume.toInt()
         val vehicle = Bike()
         val isDiscountExist = true
+
         val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
         gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+
         Assert.assertEquals(
             "Bill: $totalPrice",
             outputStreamCaptor.toString().trim()
@@ -154,13 +181,15 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckFuelVolumeForTruck() {
+    fun `when bill is ready for Truck then appropriate message should be shown`() {
         val volume = "20"
         val fuelValue = volume.toInt()
         val vehicle = Truck()
         val isDiscountExist = true
+
         val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
         gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+
         Assert.assertEquals(
             "Bill: $totalPrice",
             outputStreamCaptor.toString().trim()
@@ -168,19 +197,16 @@ class GasStationTest {
     }
 
     @Test
-    fun testCheckFuelIncorrectVolumeForCar() {
+    fun `when liters amount are greater than vehicle tank volume then error notification should be shown`() {
         val volume = "2000"
         val vehicle = Car()
         val isDiscountExist = true
+
         gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+
         Assert.assertEquals(
             "Please enter correct value (not bigger than your tank volume: ${vehicle.volume} liters)",
             outputStreamCaptor.toString().trim()
         )
-    }
-
-    @After
-    fun tearDown() {
-        System.setOut(standardOut)
     }
 }

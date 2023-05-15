@@ -1,28 +1,23 @@
 package com.epam.classes.mapper
 
-import com.epam.classes.data.Bike
-import com.epam.classes.data.Bus
-import com.epam.classes.data.Car
-import com.epam.classes.Const.BIKE
-import com.epam.classes.Const.BUS
-import com.epam.classes.Const.CAR
-import com.epam.classes.Const.TRUCK
-import com.epam.classes.data.NonVehicle
-import com.epam.classes.data.Truck
+import com.epam.classes.Const
+import com.epam.classes.data.*
 
 class VehicleMapper {
 
     /**
-     * If 'vehicleName' contains spaces we should remove them.
-     * And also case should not affect the result. We must convert 'vehicleName'
-     * to lower case
+     * Converts user's input into [Vehicle].
+     *
+     * Requirements for method:
+     *  - spaces should be removed
+     *  - input should be converted to lower case
+     * Requirements for input:
+     *  - only not-null and not-empty inputs should be converted
+     *
+     * @return vehicle which corresponds to [vehicleName] or [NonVehicle]
+     *         if input doesn't meet requirements
+     * @see [Const.BUS] [Const.TRUCK] [Const.CAR] [Const.BIKE]
      */
-    fun mapNameToVehicle(vehicleName: String?) =
-        when (vehicleName) {
-            BIKE -> Bike()
-            CAR -> Car()
-            BUS -> Bus()
-            TRUCK -> Truck()
-            else -> NonVehicle
-        }
+    fun mapNameToVehicle(vehicleName: String?): Vehicle =
+        TODO()
 }
