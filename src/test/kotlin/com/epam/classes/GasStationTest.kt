@@ -6,10 +6,7 @@ import com.epam.classes.Const.CAR
 import com.epam.classes.Const.NO
 import com.epam.classes.Const.TRUCK
 import com.epam.classes.Const.YES
-import com.epam.classes.data.Bike
-import com.epam.classes.data.Bus
-import com.epam.classes.data.Car
-import com.epam.classes.data.Truck
+import com.epam.classes.data.*
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -19,7 +16,6 @@ import java.io.PrintStream
 
 
 class GasStationTest {
-
 
     private lateinit var gasStation: GasStation
 
@@ -35,6 +31,12 @@ class GasStationTest {
     @After
     fun tearDown() {
         System.setOut(standardOut)
+    }
+
+    @Test
+    fun `when vehicle is selected and discount availability is defined then appropriate message should be shown`() {
+        gasStation.fillTank()
+        assert(outputStreamCaptor.toString().trim().contains("How much fuel do you want to fill?"))
     }
 
     @Test
@@ -116,82 +118,90 @@ class GasStationTest {
 
     @Test
     fun `when discount exists then it should be applied to the total price`() {
-        val amount = 100
-        val vehicle = Bus()
-        /*
-           Formula to calculate: amount * (costPerLiter - costPerLiter*discount)
-           Since bus uses diesel (2$ pet liter and discount 5%) we have:
-           100 * (2 - 2 * 0.05) = 100 * (2-0.1) = 190
-         */
-        val expectedPrice = 190.0
+        val bill = Bill(
+            vehicle = Bus(),
+            isDiscountExist = true,
+            amountToFill = 100,
+            totalPrice = 0.0
+        )
 
-        val totalPrice = gasStation.calculateTotalPrice(amount, vehicle, true)
-        assert(expectedPrice == totalPrice) {
+
+        val expectedTotalPrice = 190.0
+
+        val totalBill = gasStation.calculateTotalPrice(bill)
+        assert(expectedTotalPrice == totalBill.totalPrice) {
             "For example: for 100 liters of diesel (2 dollars pet liter and discount 5%) " +
-                    "total price should be 190 "
+                    "total price should be 190, but was ${totalBill.totalPrice} "
         }
     }
 
     @Test
-    fun `when bill is ready for Bus then appropriate message should be shown`() {
+    fun `when total price is calculated for Bus then it should be added to the bill`() {
         val volume = "20"
-        val fuelValue = volume.toInt()
-        val vehicle = Bus()
-        val isDiscountExist = false
+        val bill = Bill(
+            vehicle = Bus(),
+            isDiscountExist = false,
+            amountToFill = volume.toInt(),
+            totalPrice = 0.0
+        )
 
-        val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
-        gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+        gasStation.checkAndShowTotalInfo(bill, volume)
 
         Assert.assertEquals(
-            "Bill: $totalPrice",
+            "Total info: ${bill.copy(totalPrice = 40.0)}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun `when bill is ready for Car then appropriate message should be shown`() {
+    fun `when total price is calculated for Card then it should be added to the bill`() {
         val volume = "20"
-        val fuelValue = volume.toInt()
-        val vehicle = Car()
-        val isDiscountExist = false
+        val bill = Bill(
+            vehicle = Car(),
+            isDiscountExist = false,
+            amountToFill = volume.toInt(),
+            totalPrice = 0.0
+        )
 
-        val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
-        gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+        gasStation.checkAndShowTotalInfo(bill, volume)
 
         Assert.assertEquals(
-            "Bill: $totalPrice",
+            "Total info: ${bill.copy(totalPrice = 60.0)}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun `when bill is ready for Bike then appropriate message should be shown`() {
+    fun `when total price is calculated for Bike then it should be added to the bill`() {
         val volume = "10"
-        val fuelValue = volume.toInt()
-        val vehicle = Bike()
-        val isDiscountExist = true
+        val bill = Bill(
+            vehicle = Bike(),
+            isDiscountExist = false,
+            amountToFill = volume.toInt(),
+            totalPrice = 0.0
+        )
 
-        val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
-        gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+        gasStation.checkAndShowTotalInfo(bill, volume)
 
         Assert.assertEquals(
-            "Bill: $totalPrice",
+            "Total info: ${bill.copy(totalPrice = 30.0)}",
             outputStreamCaptor.toString().trim()
         )
     }
 
     @Test
-    fun `when bill is ready for Truck then appropriate message should be shown`() {
+    fun `when total price is calculated for Truck then it should be added to the bill`() {
         val volume = "20"
-        val fuelValue = volume.toInt()
-        val vehicle = Truck()
-        val isDiscountExist = true
-
-        val totalPrice = gasStation.calculateTotalPrice(fuelValue, vehicle, isDiscountExist)
-        gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+        val bill = Bill(
+            vehicle = Truck(),
+            isDiscountExist = true,
+            amountToFill = volume.toInt(),
+            totalPrice = 0.0
+        )
+        gasStation.checkAndShowTotalInfo(bill, volume)
 
         Assert.assertEquals(
-            "Bill: $totalPrice",
+            "Total info: ${bill.copy(totalPrice = 38.0)}",
             outputStreamCaptor.toString().trim()
         )
     }
@@ -199,13 +209,17 @@ class GasStationTest {
     @Test
     fun `when liters amount are greater than vehicle tank volume then error notification should be shown`() {
         val volume = "2000"
-        val vehicle = Car()
-        val isDiscountExist = true
+        val bill = Bill(
+            vehicle = Car(),
+            isDiscountExist = true,
+            amountToFill = volume.toInt(),
+            totalPrice = 0.0
+        )
 
-        gasStation.checkAndShowTotalPrice(vehicle, isDiscountExist, volume)
+        gasStation.checkAndShowTotalInfo(bill, volume)
 
         Assert.assertEquals(
-            "Please enter correct value (not bigger than your tank volume: ${vehicle.volume} liters)",
+            "Please enter correct value (not bigger than your tank volume: ${bill.vehicle.volume} liters)",
             outputStreamCaptor.toString().trim()
         )
     }
