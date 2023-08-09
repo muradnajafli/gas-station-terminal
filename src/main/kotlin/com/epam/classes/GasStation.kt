@@ -6,12 +6,9 @@ import com.epam.classes.Const.CAR
 import com.epam.classes.Const.NO
 import com.epam.classes.Const.TRUCK
 import com.epam.classes.Const.YES
-import com.epam.classes.data.Bill
-import com.epam.classes.data.Vehicle
+import com.epam.classes.data.*
 import com.epam.classes.mapper.DiscountAvailabilityMapper
 import com.epam.classes.mapper.VehicleMapper
-import com.epam.classes.data.Fuel
-import com.epam.classes.data.NonVehicle
 
 class GasStation {
 
@@ -20,8 +17,8 @@ class GasStation {
      * - initialize 'vehicleMapper' and 'discountAvailabilityMapper' here
      *   and make it private
      */
-    val vehicleMapper: VehicleMapper = TODO()
-    val discountAvailabilityMapper: DiscountAvailabilityMapper = TODO()
+    private val vehicleMapper: VehicleMapper = VehicleMapper()
+    private val discountAvailabilityMapper: DiscountAvailabilityMapper = DiscountAvailabilityMapper()
 
     /**
      * Entry point to the whole program. All "black magic" is happening right here :).
@@ -40,7 +37,21 @@ class GasStation {
      * - when our bill is ready it should be proceeded to [checkAndShowTotalInfo]
      */
     fun fillTank() {
-        TODO()
+        val selectedVehicle = selectVehicle()
+        val discount = isDiscountExist()
+
+        println("How much fuel do you want to fill?")
+        val amountToFill = readLine()?.toIntOrNull() ?: 0
+
+        val bill = Bill(selectedVehicle, discount, amountToFill, 0.0)
+        val totalBill = calculateTotalPrice(bill)
+
+        val totalPrice = totalBill.totalPrice
+
+        val updatedBill = bill.copy(totalPrice = totalPrice)
+
+        checkAndShowTotalInfo(updatedBill, updatedBill.vehicle.volume.toString())
+
     }
 
     /**
@@ -62,7 +73,23 @@ class GasStation {
      * @return appropriate vehicle based on clients input
      */
     fun getCustomerVehicle(vehicleName: String?): Vehicle {
-        TODO()
+        val lowerCaseVehicleName = vehicleName?.toLowerCase()?.trim()
+        val selectedVehicle = vehicleMapper.mapNameToVehicle(lowerCaseVehicleName)
+        return when (selectedVehicle) {
+            is Bike, is Car, is Bus, is Truck -> {
+                println("Your vehicle is $selectedVehicle")
+                selectedVehicle
+            }
+            else -> {
+                println("Please select one of available vehicles: $BIKE, $CAR, $BUS or $TRUCK")
+                val newVehicleName = readLine()?.trim()
+                if (newVehicleName.isNullOrBlank()) {
+                    NonVehicle
+                } else {
+                    getCustomerVehicle(newVehicleName)
+                }
+            }
+        }
     }
 
     /**
@@ -86,7 +113,29 @@ class GasStation {
      * @return is discount available or not
      */
     fun checkAndReturnIsDiscountAvailable(answerAboutDiscount: String?): Boolean? {
-        TODO()
+        val cleanedAnswer = answerAboutDiscount?.toLowerCase()?.trim()
+        val mappedAnswer = discountAvailabilityMapper.mapAnswer(cleanedAnswer)
+
+
+        return when (mappedAnswer) {
+            DiscountAvailability.AVAILABLE -> {
+                println("Discount exist")
+                true
+            }
+            DiscountAvailability.NON_AVAILABLE -> {
+                println("Discount doesn't exist")
+                false
+            }
+            else -> {
+                println("Please enter \"$YES\" or \"$NO\"")
+                val newAnswer = readLine()?.toLowerCase()?.trim()
+                if (newAnswer.isNullOrBlank()) {
+                    null
+                } else {
+                    checkAndReturnIsDiscountAvailable(newAnswer)
+                }
+            }
+        }
     }
 
     /**
@@ -111,7 +160,19 @@ class GasStation {
      * @param bill with all corresponding data
      */
     fun checkAndShowTotalInfo(bill: Bill, volumeString: String?) {
-        TODO()
+
+        val volume = volumeString?.toIntOrNull() ?: return
+
+        if (volume > bill.vehicle.volume) {
+            println("Please enter correct value (not bigger than your tank volume: ${bill.vehicle.volume} liters)")
+            val newVolumeString = readLine()
+            checkAndShowTotalInfo(bill, newVolumeString)
+
+        } else {
+            val newBill = bill.copy(amountToFill = volume)
+            val totalBill = calculateTotalPrice(newBill)
+            println("Total info: $totalBill")
+        }
     }
 
     /**
@@ -128,7 +189,14 @@ class GasStation {
      * @return bill which includes total price based on the required fuel
      */
     fun calculateTotalPrice(bill: Bill): Bill {
-        TODO()
+        val fuel = bill.vehicle.fuel
+        val fuelCost = fuel.cost
+        val discountPercentage = if (bill.isDiscountExist == true) fuel.discount else 0
+
+        val discountFactor = 1 - discountPercentage.toDouble() / 100
+        val totalPrice = fuelCost * bill.amountToFill * discountFactor
+
+        return bill.copy(totalPrice = totalPrice)
     }
 
     private fun isDiscountExist(): Boolean? {

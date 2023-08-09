@@ -22,13 +22,16 @@ sealed class Fuel {
  *   override all abstract properties in the body of the class
  */
 data class Diesel(
-    val cost: Int = 2,
-    val discount: Int = 5
-)
+    override val cost: Int = 2,
+    override val discount: Int = 5
+): Fuel()
 
 data class Petrol(
-    val cost: Int = 3,
-    val discount: Int = 10
-)
+    override val cost: Int = 3,
+    override val discount: Int = 10
+) : Fuel()
 
-object NonFuel
+object NonFuel : Fuel() {
+    override val cost: Int = 0
+    override val discount: Int = 0
+}

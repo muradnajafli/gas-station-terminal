@@ -1,7 +1,7 @@
 package com.epam.classes.mapper
 
-import com.epam.classes.data.DiscountAvailability
 import com.epam.classes.Const
+import com.epam.classes.data.*
 
 class DiscountAvailabilityMapper {
 
@@ -18,6 +18,15 @@ class DiscountAvailabilityMapper {
      *         if input doesn't meet requirements
      * @see [Const.YES] [Const.NO]
      */
-    fun mapAnswer(isAvailable: String?): DiscountAvailability =
-        TODO()
+    fun mapAnswer(isAvailable: String?): DiscountAvailability{
+        if (isAvailable != null) {
+            val lowerCaseIsAvailable = isAvailable.toLowerCase().trim()
+            return when (lowerCaseIsAvailable) {
+                Const.YES -> DiscountAvailability.AVAILABLE
+                Const.NO -> DiscountAvailability.NON_AVAILABLE
+                else -> DiscountAvailability.ERROR
+            }
+        }
+        return DiscountAvailability.ERROR
+    }
 }
