@@ -132,7 +132,8 @@ class GasStation {
                 val newAnswer = readLine()?.toLowerCase()?.trim()
                 if (newAnswer.isNullOrBlank()) {
                     null
-                } else {
+                }
+                else {
                     checkAndReturnIsDiscountAvailable(newAnswer)
                 }
             }
