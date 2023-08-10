@@ -170,7 +170,8 @@ class GasStation {
             val newVolumeString = readLine()
             checkAndShowTotalInfo(bill, newVolumeString)
 
-        } else {
+        }
+        else {
             val newBill = bill.copy(amountToFill = volume)
             val totalBill = calculateTotalPrice(newBill)
             println("Total info: $totalBill")
