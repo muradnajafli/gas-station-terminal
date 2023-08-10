@@ -126,7 +126,7 @@ class GasStation {
                 println("Discount doesn't exist")
                 false
             }
-            else -> {
+            DiscountAvailability.ERROR -> {
                 println("Please enter \"$YES\" or \"$NO\"")
                 val newAnswer = readLine()?.toLowerCase()?.trim()
                 if (newAnswer.isNullOrBlank()) {
