@@ -85,7 +85,8 @@ class GasStation {
                 val newVehicleName = readLine()?.trim()
                 if (newVehicleName.isNullOrBlank()) {
                     NonVehicle
-                } else {
+                }
+                else {
                     getCustomerVehicle(newVehicleName)
                 }
             }
