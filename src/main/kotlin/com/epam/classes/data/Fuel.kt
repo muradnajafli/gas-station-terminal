@@ -29,7 +29,7 @@ data class Diesel(
 data class Petrol(
     override val cost: Int = 3,
     override val discount: Int = 10
-) : Fuel()
+): Fuel()
 
 object NonFuel : Fuel() {
     override val cost: Int = 0
