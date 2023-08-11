@@ -75,6 +75,7 @@ class GasStation {
     fun getCustomerVehicle(vehicleName: String?): Vehicle {
         val lowerCaseVehicleName = vehicleName?.toLowerCase()?.trim()
         val selectedVehicle = vehicleMapper.mapNameToVehicle(lowerCaseVehicleName)
+
         return when (selectedVehicle) {
             is Bike, is Car, is Bus, is Truck -> {
                 println("Your vehicle is $selectedVehicle")
@@ -116,7 +117,6 @@ class GasStation {
     fun checkAndReturnIsDiscountAvailable(answerAboutDiscount: String?): Boolean? {
         val cleanedAnswer = answerAboutDiscount?.toLowerCase()?.trim()
         val mappedAnswer = discountAvailabilityMapper.mapAnswer(cleanedAnswer)
-
 
         return when (mappedAnswer) {
             DiscountAvailability.AVAILABLE -> {
