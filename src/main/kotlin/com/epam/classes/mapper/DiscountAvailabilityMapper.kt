@@ -19,14 +19,11 @@ class DiscountAvailabilityMapper {
      * @see [Const.YES] [Const.NO]
      */
     fun mapAnswer(isAvailable: String?): DiscountAvailability{
-        if (isAvailable != null) {
-            val lowerCaseIsAvailable = isAvailable.toLowerCase().trim()
-            return when (lowerCaseIsAvailable) {
-                Const.YES -> DiscountAvailability.AVAILABLE
-                Const.NO -> DiscountAvailability.NON_AVAILABLE
-                else -> DiscountAvailability.ERROR
+        val lowerCaseIsAvailable = isAvailable?.toLowerCase()?.trim()
+        return when (lowerCaseIsAvailable) {
+            Const.YES -> DiscountAvailability.AVAILABLE
+            Const.NO -> DiscountAvailability.NON_AVAILABLE
+            else -> DiscountAvailability.ERROR
             }
         }
-        return DiscountAvailability.ERROR
-    }
 }

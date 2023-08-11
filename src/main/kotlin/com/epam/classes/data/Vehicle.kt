@@ -26,7 +26,8 @@ sealed class Vehicle(
  */
 class Bike: Vehicle(fuel = Petrol(), volume = 15) {
     override fun toString(): String {
-        return "Bike"}
+        return "Bike"
+    }
 }
 
 class Car : Vehicle(fuel = Petrol(), volume = 70) {
