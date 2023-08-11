@@ -24,6 +24,6 @@ class DiscountAvailabilityMapper {
             Const.YES -> DiscountAvailability.AVAILABLE
             Const.NO -> DiscountAvailability.NON_AVAILABLE
             else -> DiscountAvailability.ERROR
-            }
         }
+    }
 }
